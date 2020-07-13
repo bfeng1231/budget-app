@@ -1,0 +1,18 @@
+.home {
+  background-color: #DFD3B6;
+  padding: 15px;
+  border-radius: 10px;
+  color: #464D53;
+}
+
+.charts {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 100px;
+  row-gap: 50px;
+}
+
+.lgChart {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}

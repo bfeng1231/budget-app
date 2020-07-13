@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+.App {
+  height: 100vh;
+  background-color: white;
+}
+
+.profile {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 100px;
+  font-family: 'Patrick Hand', 'Helvetica' ;
+}
+
+.login {
+  background-image: url('../assets/background.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+  border: 20px solid rgba(255, 255, 255, .25);
+  border-left: 0px;
+  border-right: 0px;
+}
+
+.sidebar {
+  width: 11vw;
+  min-width: 200px;
+}
+
+.mainPage {
+  padding: 50px 100px 50px 0px;
+  width: 80vw;
+  min-width: 800px;
+}
+
+table {
+  background: #f8f8ff;
+  color: black;
+  border-radius: 10px;
+}
+
+th, td {
+  padding: 10px 20px 0px 10px;
+  border: 1px solid black;
+}
+
+div {
+  border: 0px solid black;
+}
+
+h1 {
+  padding-bottom: 5px;
+  border-bottom: 4px solid white;
+}

@@ -1,0 +1,43 @@
+.sideBar img {
+  border-radius: 50%;
+}
+
+.sideBar {
+  height: 100vh;
+  background: #0C0D0CEF;
+  color: white;
+  position: fixed;
+  width: 11vw;
+  min-width: 200px;
+  top: 0;
+  left: 0;
+}
+
+.userInfo {
+  padding: 20px 40px 30px;
+  text-align: center;
+  border-bottom: 2px solid white;
+}
+
+.navigation {
+  padding-top: 40px;
+}
+
+.navigation div {
+  padding: 10px;
+  margin: -10px -10px;
+}
+
+.navigation button {
+  width: 100%;
+  padding: 15px;
+  background: #242621;
+  border-color: #242621;
+  color: white;
+}
+
+.navigation button:hover {
+  background: white;
+  color: black;
+}
+
