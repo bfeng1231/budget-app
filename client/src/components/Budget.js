@@ -8,8 +8,8 @@ import { NavLink } from 'react-router-dom';
 import CanvasJSReact from '../assets/canvasjs.react';
 import '../css/Budget.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
-import { Alert, Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input} from 'reactstrap';
+import { faEdit, faDollarSign } from '@fortawesome/free-solid-svg-icons';
+import { Alert, Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, Row, Col} from 'reactstrap';
 
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
@@ -52,11 +52,11 @@ class Budget extends React.Component {
 
   onSubmit = () => {
     if (this.state.input < 0)
-      return this.setState({msg: 'Please enter a positive number'})
+      return this.setState({msg: 'Please enter a positive amount'})
     if (isNaN(this.state.input) || !this.state.input)
       return this.setState({msg: 'Please enter a number'})
-    this.props.changeBudget(this.state.token, Number(this.state.input));
-    this.setState({ budget: Number(this.state.input)});
+    this.props.changeBudget(this.state.token, Number(this.state.input).toFixed(2));
+    this.setState({ budget: Number(this.state.input).toFixed(2)});
     this.toggle();
   }
 
@@ -64,7 +64,7 @@ class Budget extends React.Component {
     const today = new Date()
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-    let monthExpenses = this.props.data.items.filter(elem => elem.date.substr(0,7) === today.toISOString().substr(0,7))
+    let monthExpenses = this.props.data.items.filter(elem => elem.date.substr(0,7) === today.toISOString().substr(0,7)).sort((a, b) => new Date(b.date) - new Date(a.date))
    
     let itemList = monthExpenses.map(elem => (
       <tr key={elem._id}>
@@ -92,11 +92,11 @@ class Budget extends React.Component {
 				indexLabelFontSize: 16,
 				indexLabel: "{label} - {y}%",
 				dataPoints: [
-					{ y: (monthExpenses.filter(elem => elem.desc === 'Food').reduce((total, elem) => total + elem.cost, 0) / monthExpenses.reduce((total, elem) => total + elem.cost, 0)) * 100, label: "Food" },
-					{ y: (monthExpenses.filter(elem => elem.desc === 'Entertainment').reduce((total, elem) => total + elem.cost, 0) / monthExpenses.reduce((total, elem) => total + elem.cost, 0)) * 100, label: "Entertainment" },
-					{ y: (monthExpenses.filter(elem => elem.desc === 'Bills').reduce((total, elem) => total + elem.cost, 0) / monthExpenses.reduce((total, elem) => total + elem.cost, 0)) * 100, label: "Bills" },
-					{ y: (monthExpenses.filter(elem => elem.desc === 'Clothing').reduce((total, elem) => total + elem.cost, 0) / monthExpenses.reduce((total, elem) => total + elem.cost, 0)) * 100, label: "Clothing" },
-					{ y: (monthExpenses.filter(elem => elem.desc === 'Other').reduce((total, elem) => total + elem.cost, 0) / monthExpenses.reduce((total, elem) => total + elem.cost, 0)) * 100, label: "Other" }
+					{ y: Math.round((monthExpenses.filter(elem => elem.desc === 'Food').reduce((total, elem) => total + elem.cost, 0) / monthExpenses.reduce((total, elem) => total + elem.cost, 0)) * 100), label: "Food" },
+					{ y: Math.round((monthExpenses.filter(elem => elem.desc === 'Entertainment').reduce((total, elem) => total + elem.cost, 0) / monthExpenses.reduce((total, elem) => total + elem.cost, 0)) * 100), label: "Entertainment" },
+					{ y: Math.round((monthExpenses.filter(elem => elem.desc === 'Bills').reduce((total, elem) => total + elem.cost, 0) / monthExpenses.reduce((total, elem) => total + elem.cost, 0)) * 100), label: "Bills" },
+					{ y: Math.round((monthExpenses.filter(elem => elem.desc === 'Clothing').reduce((total, elem) => total + elem.cost, 0) / monthExpenses.reduce((total, elem) => total + elem.cost, 0)) * 100), label: "Clothing" },
+					{ y: Math.round((monthExpenses.filter(elem => elem.desc === 'Other').reduce((total, elem) => total + elem.cost, 0) / monthExpenses.reduce((total, elem) => total + elem.cost, 0)) * 100), label: "Other" }
 				]
 			}]
     }
@@ -146,9 +146,16 @@ class Budget extends React.Component {
               <ModalBody>
                 {this.state.msg ? <Alert color='danger'>{this.state.msg}</Alert> : null}          
                 <Form>
-                  <FormGroup>
+                  <FormGroup>                    
                     <Label for='budget'>Amount:</Label>
-                    <Input type='text' name='input' id='input' onChange={this.onChange} className='mb-3'/>   
+                    <Row>
+                      <Col xs='auto' className='icon'>
+                        <FontAwesomeIcon icon={faDollarSign}/>
+                      </Col>
+                      <Col>
+                        <Input type='text' name='input' id='input' onChange={this.onChange} className='mb-3'/>
+                      </Col>
+                    </Row>
                     <Button onClick={this.onSubmit}>Submit</Button>
                   </FormGroup>
                 </Form>

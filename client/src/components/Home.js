@@ -88,11 +88,11 @@ class Home extends React.Component {
 				indexLabelFontSize: 16,
 				indexLabel: "{label} - {y}%",
 				dataPoints: [
-					{ y: (this.props.data.items.filter(elem => elem.desc === 'Food').reduce((total, elem) => total + elem.cost, 0) / this.props.data.items.reduce((total, elem) => total + elem.cost, 0)) * 100, label: "Food" },
-					{ y: (this.props.data.items.filter(elem => elem.desc === 'Entertainment').reduce((total, elem) => total + elem.cost, 0) / this.props.data.items.reduce((total, elem) => total + elem.cost, 0)) * 100, label: "Entertainment" },
-					{ y: (this.props.data.items.filter(elem => elem.desc === 'Bills').reduce((total, elem) => total + elem.cost, 0) / this.props.data.items.reduce((total, elem) => total + elem.cost, 0)) * 100, label: "Bills" },
-					{ y: (this.props.data.items.filter(elem => elem.desc === 'Clothing').reduce((total, elem) => total + elem.cost, 0) / this.props.data.items.reduce((total, elem) => total + elem.cost, 0)) * 100, label: "Clothing" },
-					{ y: (this.props.data.items.filter(elem => elem.desc === 'Other').reduce((total, elem) => total + elem.cost, 0) / this.props.data.items.reduce((total, elem) => total + elem.cost, 0)) * 100, label: "Other" }
+					{ y: Math.round((this.props.data.items.filter(elem => elem.desc === 'Food').reduce((total, elem) => total + elem.cost, 0) / this.props.data.items.reduce((total, elem) => total + elem.cost, 0)) * 100), label: "Food" },
+					{ y: Math.round((this.props.data.items.filter(elem => elem.desc === 'Entertainment').reduce((total, elem) => total + elem.cost, 0) / this.props.data.items.reduce((total, elem) => total + elem.cost, 0)) * 100), label: "Entertainment" },
+					{ y: Math.round((this.props.data.items.filter(elem => elem.desc === 'Bills').reduce((total, elem) => total + elem.cost, 0) / this.props.data.items.reduce((total, elem) => total + elem.cost, 0)) * 100), label: "Bills" },
+					{ y: Math.round((this.props.data.items.filter(elem => elem.desc === 'Clothing').reduce((total, elem) => total + elem.cost, 0) / this.props.data.items.reduce((total, elem) => total + elem.cost, 0)) * 100), label: "Clothing" },
+					{ y: Math.round((this.props.data.items.filter(elem => elem.desc === 'Other').reduce((total, elem) => total + elem.cost, 0) / this.props.data.items.reduce((total, elem) => total + elem.cost, 0)) * 100), label: "Other" }
 				]
 			}]
     }
@@ -131,7 +131,7 @@ class Home extends React.Component {
           <h4>Today is {today.toDateString()}</h4>
         </div>
         <div>
-          <h6>Your budget for this month is: ${this.state.budget}</h6>
+          <h5>Your budget for this month is: ${this.state.budget}</h5>
         </div>
         <div className='charts'>
           <div className='lgChart'>

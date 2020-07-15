@@ -8,3 +8,8 @@
 .months {
   border-bottom: 2px solid white;
 }
+
+.icon {
+  margin-right: -25px;
+  margin-top: 5px
+}

@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getExpenses, postExpenses, deleteExpenses } from '../actions/expensesActions';
-import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, Alert} from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, Alert, Row, Col} from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../css/Expenses.css';
-import { faTrashAlt, faPlus, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt, faPlus, faEdit, faDollarSign } from '@fortawesome/free-solid-svg-icons';
 import { v4 as uuidv4 } from 'uuid';
 
 class Expenses extends React.Component {
@@ -17,6 +17,7 @@ class Expenses extends React.Component {
     desc: 'Food',
     date: '',
     deleteMode: false,
+    seeAll: false,
     token: window.localStorage.getItem('token'),
     msg: ''
   }
@@ -48,7 +49,7 @@ class Expenses extends React.Component {
       return this.setState({msg: 'Please enter a number'})
 
     if (Number(this.state.cost) < 0)
-      return this.setState({msg: 'Please enter a positive number'})
+      return this.setState({msg: 'Please enter a positive amount'})
 
     let cost = this.state.cost
     if (cost.toString().indexOf('.') === -1)
@@ -57,7 +58,7 @@ class Expenses extends React.Component {
     const newItem = {
       name: this.state.name,
       desc: this.state.desc,
-      cost: Number(cost),
+      cost: Number(cost).toFixed(2),
       date: this.state.date,
       uid: uuidv4()
     }
@@ -67,6 +68,10 @@ class Expenses extends React.Component {
 
   mode = () => {
     this.setState({ deleteMode: !this.state.deleteMode })
+  }
+
+  seeAll = () => {
+    this.setState({ seeAll: !this.state.seeAll })
   }
 
   delete = (e) => {
@@ -92,12 +97,27 @@ class Expenses extends React.Component {
       monthlyExpenses.push({
         name: months[iterateMonth],
         year: currentYear,
-        expenses: [...this.props.data.items.filter(elem => new Date(elem.date).getMonth() === iterateMonth && Number(elem.date.substr(0,4)) === currentYear)]
+        expenses: [...this.props.data.items
+          .filter(elem => new Date(elem.date).getMonth() === iterateMonth && Number(elem.date.substr(0,4)) === currentYear)
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+        ]
       })
     }
     //console.log(monthlyExpenses)
 
     //.sort((a, b) => new Date(b.date) - new Date(a.date))
+
+    let allExpenses = this.props.data.items
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .map(elem => (
+      <tr key={elem._id}>
+          <td>{elem.name}</td>
+          <td>${elem.cost}</td>
+          <td>{elem.desc}</td>
+          <td>{elem.date.substr(0,10)}</td>
+          {this.state.deleteMode ? <td><button onClick={this.delete} id={elem.uid}><FontAwesomeIcon icon={faTrashAlt}/> Delete</button></td> : null}
+      </tr>
+    ))
 
     let displayExpenses = monthlyExpenses.map(elem => (
       <div key={elem.name + elem.year} className='months mb-3'>
@@ -119,7 +139,7 @@ class Expenses extends React.Component {
                 <td>${elem.cost}</td>
                 <td>{elem.desc}</td>
                 <td>{elem.date.substr(0,10)}</td>
-                {this.state.deleteMode ? <td><button onClick={this.delete} id={elem.uid}><FontAwesomeIcon icon={faTrashAlt} /></button></td> : null}
+                {this.state.deleteMode ? <td><button onClick={this.delete} id={elem.uid}><FontAwesomeIcon icon={faTrashAlt}/> Delete</button></td> : null}
               </tr>
             ))}
           </tbody>
@@ -132,12 +152,29 @@ class Expenses extends React.Component {
         <div>
           <h1>Expenses</h1>
         </div>
-        <div>
-          {displayExpenses}
-        </div>
+          {this.state.seeAll ? 
+          <div>
+            <table className='mb-3'>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Cost</th>
+                  <th>Catagory</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {allExpenses}
+              </tbody>
+            </table>
+          </div> : 
+          <div>{displayExpenses}</div>}
         <div>
           <Button onClick={this.toggle} color='primary' className='mr-3'><FontAwesomeIcon icon={faPlus}/> Add Item</Button>
-          <Button onClick={this.mode} color='warning'><FontAwesomeIcon icon={faEdit}/> Edit Items</Button>
+          <Button onClick={this.mode} color='warning' className='mr-3'><FontAwesomeIcon icon={faEdit}/> Edit Items</Button>
+          {this.state.seeAll ?
+          <Button onClick={this.seeAll} color='secondary'>Back</Button> :
+          <Button onClick={this.seeAll} color='secondary'>See All</Button>}
         </div>
         <div>
           <Modal isOpen={this.state.modal} toggle={this.toggle}>
@@ -151,7 +188,14 @@ class Expenses extends React.Component {
                   <Label for='item'>Item Name:</Label>
                   <Input type='text' name='name' id='name' onChange={this.onChange} className='mb-3'/>
                   <Label for='cost'>Cost:</Label>
-                  <Input type='text' name='cost' id='cost' onChange={this.onChange} className='mb-3'/>
+                  <Row>
+                    <Col xs='auto' className='icon'>
+                      <FontAwesomeIcon icon={faDollarSign}/>
+                    </Col>
+                    <Col>
+                      <Input type='text' name='cost' id='cost' onChange={this.onChange} className='mb-3'/>
+                    </Col>
+                  </Row>
                   <Label for="desc">Catagory:</Label>
                   <Input type="select" name="desc" id="desc" onChange={this.onChange} className='mb-3'>
                     <option>Food</option>

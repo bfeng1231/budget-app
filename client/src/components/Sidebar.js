@@ -44,12 +44,12 @@ class Sidebar extends React.Component {
             <NavLink exact to='/profile' activeClassName='buttonActive'>
               <button><FontAwesomeIcon icon={faHome}/> Home</button>
             </NavLink>
-            <NavLink to='/profile/expenses' activeClassName=''>
-              <button><FontAwesomeIcon icon={faScroll}/> Expenses</button>
-            </NavLink>
             <NavLink to='/profile/budget' activeClassName=''>
               <button><FontAwesomeIcon icon={faDollarSign}/> Budget</button>
             </NavLink>
+            <NavLink to='/profile/expenses' activeClassName=''>
+              <button><FontAwesomeIcon icon={faScroll}/> Expenses</button>
+            </NavLink>         
             <NavLink to='/profile/settings' activeClassName=''>
               <button><FontAwesomeIcon icon={faCog}/> Settings</button>
             </NavLink>  
